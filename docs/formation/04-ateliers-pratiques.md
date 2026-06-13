@@ -27,7 +27,7 @@ Objectif :
 
 Étapes :
 
-1. Ouvrir `should_use_tool` dans `client.py`.
+1. Ouvrir `detect_tool_request` dans `intent_router.py`.
 2. Ajouter de nouveaux mots-clés météo.
 3. Tester 5 formulations différentes.
 
@@ -50,8 +50,8 @@ Suggestion :
 Étapes :
 
 1. Créer la fonction tool.
-2. Intégrer `process_tool_call`.
-3. Étendre `should_use_tool`.
+2. Intégrer la fonction dans `server.py` et `tool_services.py`.
+3. Étendre `detect_tool_request`.
 4. Ajouter un test manuel.
 
 ## Atelier 4 : robustesse réseau

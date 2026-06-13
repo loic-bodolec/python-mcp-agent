@@ -36,8 +36,9 @@ Il est utile pour :
 
 Quand on le lance directement :
 
-- quand un client MCP externe doit utiliser ces tools
-- quand on teste l'intégration MCP de bout en bout
+- `server.py` est lancé par `mcp_client.py` en mode stdio
+- on l'utilise quand un client MCP doit accéder à ces tools
+- on le teste pour vérifier l'intégration MCP de bout en bout
 
 Pourquoi il n'est plus optionnel ici :
 

@@ -1,4 +1,4 @@
-# MCP Simple Agent (Groq + wttr.in)
+# MCP Simple Agent (Groq + wttr.in + pytz)
 
 Assistant CLI Python avec 2 outils :
 
@@ -34,7 +34,7 @@ Utilisateur
      -> tool_services.py
      -> wttr.in (météo)
      -> pytz (heure)
-     -> Groq (formulation finale)
+      -> modèle via Groq (formulation finale)
 ```
 
 ### Schéma de séquence (résumé)
@@ -67,33 +67,43 @@ sequenceDiagram
 
 ## Qu'est-ce que Groq ?
 
-Groq est la plateforme LLM utilisée pour générer des réponses en langage naturel.
+Groq est la plateforme d'inférence utilisée pour exécuter le modèle de langage et générer des réponses en langage naturel.
 
 Points importants :
 
 - Groq ne fournit pas les données météo.
-- Groq reformule et produit la réponse finale affichée.
+- Groq héberge et sert le modèle de langage.
+- Le modèle reformule et produit la réponse finale affichée.
 - Les données météo proviennent de `wttr.in`.
 
 En pratique :
 
 - `wttr.in` = source de données météo
 - `pytz` = calcul de l'heure locale
-- Groq = moteur conversationnel (texte final)
+- Groq = couche d'inférence qui sert le modèle conversationnel
 
 ## Qui fait quoi dans le projet ?
 
 - `client.py`
   - détecte l'intention utilisateur (météo, heure, autre)
+  - s'appuie sur `intent_router.py` pour la détection d'intention
   - démarre une session MCP locale vers `server.py`
+  - passe par `mcp_client.py` pour parler au serveur
   - appelle les tools via MCP si nécessaire
-  - envoie le contexte et le résultat à Groq
+  - envoie le contexte et le résultat au modèle via Groq
   - affiche la réponse finale
 
 - `server.py`
   - expose les tools `get_weather` et `get_time` via MCP
   - est utilisé par `client.py`
   - permet aussi d'intégrer ces tools dans un autre agent MCP
+
+- `intent_router.py`
+  - détecte si une question doit aller vers la météo ou l'heure
+
+- `mcp_client.py`
+  - ouvre la session MCP locale en `stdio`
+  - appelle les tools côté serveur
 
 - `tool_services.py`
   - contient la logique métier partagée des tools
@@ -118,7 +128,7 @@ Question : "Quelle est la météo à Nantes ?"
 3. Le client appelle `server.py` via MCP.
 4. `server.py` exécute le tool météo via `tool_services.py`.
 5. Le résultat brut est ajouté à l'historique de conversation.
-6. Groq produit une réponse naturelle et lisible.
+6. Le modèle via Groq produit une réponse naturelle et lisible.
 7. La réponse est affichée.
 
 ### 2) Exemple heure
@@ -131,7 +141,7 @@ Question : "Quelle heure est-il à Tokyo ?"
 2. Le client choisit le fuseau (`Asia/Tokyo`).
 3. Le client appelle `server.py` via MCP.
 4. Le serveur calcule l'heure avec `pytz`.
-5. Le résultat est passé à Groq pour la formulation finale.
+5. Le résultat est passé au modèle via Groq pour la formulation finale.
 
 ### 3) Exemple question générale
 
@@ -140,8 +150,8 @@ Question : "Expliquer la relativité"
 Étapes :
 
 1. Aucun tool n'est appelé.
-2. Le message est envoyé directement à Groq.
-3. Groq répond normalement.
+2. Le message est envoyé directement au modèle via Groq.
+3. Le modèle répond normalement via Groq.
 
 ## Prérequis
 
@@ -157,8 +167,8 @@ python -m venv .venv
 # PowerShell
 .venv\Scripts\Activate.ps1
 
-# Git Bash
-source .venv/Scripts/activate
+# Linux / macOS / Git Bash
+source .venv/bin/activate
 
 pip install -r requirements.txt
 ```
@@ -244,7 +254,7 @@ Le serveur expose 2 tools :
 - `get_weather`
 - `get_time`
 
-Quand lancer ce serveur directement :
+Quand lancer ce serveur directement ?
 
 - quand un client MCP externe doit consommer ces tools
 - quand on veut valider une architecture client MCP -> serveur MCP
