@@ -18,7 +18,7 @@ Un agent moderne combine au moins 3 éléments :
 
 Dans ce projet :
 
-- LLM = Groq
+- LLM = un modèle de langage servi via Groq
 - Tool météo = wttr.in
 - Tool heure = pytz
 - Orchestrateur = logique dans `client.py`, qui dialogue avec `server.py` via MCP
@@ -46,8 +46,6 @@ Concrètement, un serveur MCP :
 - reçoit les appels venant d'un client MCP
 - exécute le tool demandé
 - renvoie le résultat au client
-
-Dans ce dépôt, `server.py` n'est plus seulement une démo : il fait partie du flux principal et expose les tools utilisés par `client.py`.
 
 ## 3) Comment cela se traduit dans ce projet
 
@@ -113,8 +111,6 @@ Avec MCP :
 - les tools sont plus faciles à brancher dans plusieurs clients
 - l'architecture est plus claire entre client et serveur
 - on peut réutiliser les mêmes tools dans d'autres agents plus tard
-
-Dans ce projet, le mode principal passe maintenant par `client.py` puis `server.py`, ce qui rend l'architecture à la fois modulaire et directement interopérable.
 
 ## 7) Lexique rapide
 

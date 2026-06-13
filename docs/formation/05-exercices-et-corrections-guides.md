@@ -4,7 +4,7 @@
 
 Question :
 
-Pourquoi la météo n'est-elle pas fournie directement par Groq ?
+Pourquoi la météo n'est-elle pas fournie directement par le modèle ?
 
 Correction guidée :
 
