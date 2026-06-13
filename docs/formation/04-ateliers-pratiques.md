@@ -45,7 +45,8 @@ Objectif :
 
 Suggestion :
 
-- `get_day_of_week(city_or_timezone)`
+- `get_weather_forecast(city)` pour une météo à J+1 / J+3
+- `get_air_quality(city)` pour rester dans les données locales et réelles
 
 Étapes :
 
