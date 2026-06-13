@@ -314,6 +314,12 @@ PY
 
 Résultat attendu : présence de `get_weather` et `get_time`, puis retour texte météo/heure sans appeler directement les fonctions côté client.
 
+## Lancer les tests unitaires
+
+```bash
+python -m unittest discover -s tests -v
+```
+
 ## Limites actuelles
 
 - seules les requêtes détectées comme météo/heure passent par MCP
